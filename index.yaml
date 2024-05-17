@@ -14,6 +14,16 @@ entries:
   navidrome:
   - apiVersion: v2
     appVersion: 0.52.5
+    created: "2024-05-17T15:07:01.611246702Z"
+    description: A Helm chart for Kubernetes
+    digest: f70c18835ea2a388aa80b6cc20bb31964f2de3c7f0773e75b128db07433a25cb
+    name: navidrome
+    type: application
+    urls:
+    - https://github.com/ajquack/helm-charts/releases/download/navidrome-0.2.5/navidrome-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
+    appVersion: 0.52.5
     created: "2024-05-17T14:57:29.97086525Z"
     description: A Helm chart for Kubernetes
     digest: 756fc9ce1d6a807a0017f7011584817f903f48c16503d27dbb4e769e691c55d4
@@ -162,4 +172,4 @@ entries:
     urls:
     - https://github.com/ajquack/helm-charts/releases/download/navidrome-0.1.0/navidrome-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-17T14:57:29.970980745Z"
+generated: "2024-05-17T15:07:01.611400872Z"
