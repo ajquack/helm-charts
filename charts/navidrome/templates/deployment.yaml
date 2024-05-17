@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "navidrome.fullname" . }}
+  labels:
+    {{- include "navidrome.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "navidrome.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "navidrome.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "navidrome.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            - name: navidrome-main
+              mountPath: /data
+              subPath: {{ ternary "root" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
+            {{- if and .Values.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
+            - name: navidrome-data
+              mountPath: {{ .Values.navidrome.datadir }}
+              subPath: {{ ternary "data" (printf "%s/music" .Values.persistence.navidromeMusic.subPath) (empty .Values.persistence.navidromeMusic.subPath) }}
+            {{- else }}
+            - name: navidrome-main
+              mountPath: {{ .Values.navidrome.datadir }}
+              subPath: {{ ternary "data" (printf "%s/music" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
+            {{- end }}
+          {{- end }}
+            - name: navidrome-config
+              mountPath: /data
+              readOnly: true
+      {{- with .Values.volumes }}
+      volumes:
+        - name: navidrome-main
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome{{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if and .Values.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
+        - name: navidrome-music
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.navidromeMusic.existingClaim }}{{ .Values.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
+        {{- end }}
+        - name: navidrome-config
+          configMap:
+            name: navidrome-config
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
