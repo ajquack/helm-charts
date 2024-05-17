@@ -50,13 +50,13 @@ spec:
             - name: navidrome-main
               mountPath: /
               subPath: {{ ternary "data" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
-            {{- if and .Values.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
+            {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
             - name: navidrome-data
               mountPath: {{ .Values.navidrome.datadir }}
             {{- else }}
             - name: navidrome-main
               mountPath: /
-              subPath: {{ ternary "music" (printf "%s/music" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
+              subPath: {{ ternary "music" (printf "%s/music" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
             {{- end }}
             - name: navidrome-config
               mountPath: /data
@@ -69,7 +69,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
+        {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
         - name: navidrome-music
           persistentVolumeClaim:
             claimName: {{ if .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{ .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
