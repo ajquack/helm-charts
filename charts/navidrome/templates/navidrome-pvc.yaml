@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+{{- if and .Values.navidrome.persistence.enabled (not .Values.navidrome.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -11,16 +11,16 @@ metadata:
     app.kubernetes.io/component: app
   annotations:
     helm.sh/resource-policy: keep
-  {{- with .Values.persistence.annotations }}
+  {{- with .Values.navidrome.persistence.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
+    - {{ .Values.navidrome.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size | quote }}
-  {{- with .Values.persistence.storageClass }}
+      storage: {{ .Values.navidrome.persistence.size | quote }}
+  {{- with .Values.navidrome.persistence.storageClass }}
   {{- if (eq "-" .) }}
   storageClassName: ""
   {{- else }}

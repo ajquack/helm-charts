@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled .Values.persistence.navidromeMusic.enabled (not .Values.persistence.navidromeMusic.existingClaim) }}
+{{- if and .Values.navidrome.persistence.enabled .Values.navidrome.persistence.navidromeMusic.enabled (not .Values.navidrome.persistence.navidromeMusic.existingClaim) }}
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -12,16 +12,16 @@ metadata:
     app.kubernetes.io/component: app
   annotations:
     helm.sh/resource-policy: keep
-  {{- with .Values.persistence.navidromeMusic.annotations }}
+  {{- with .Values.navidrome.persistence.navidromeMusic.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.navidromeMusic.accessMode | quote }}
+    - {{ .Values.navidrome.persistence.navidromeMusic.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.navidromeMusic.size | quote }}
-  {{- with .Values.persistence.navidromeMusic.storageClass }}
+      storage: {{ .Values.navidrome.persistence.navidromeMusic.size | quote }}
+  {{- with .Values.navidrome.persistence.navidromeMusic.storageClass }}
   {{- if (eq "-" .) }}
   storageClassName: ""
   {{- else }}
