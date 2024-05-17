@@ -37,7 +37,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: navidrome
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           #livenessProbe:
@@ -46,7 +46,6 @@ spec:
           #  {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
             - name: navidrome-main
               mountPath: /data
@@ -60,11 +59,9 @@ spec:
               mountPath: {{ .Values.navidrome.datadir }}
               subPath: {{ ternary "data" (printf "%s/music" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
             {{- end }}
-          {{- end }}
             - name: navidrome-config
               mountPath: /data
               readOnly: true
-      {{- with .Values.volumes }}
       volumes:
         - name: navidrome-main
           {{- if .Values.persistence.enabled }}
