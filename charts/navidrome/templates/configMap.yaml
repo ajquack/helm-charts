@@ -4,4 +4,4 @@ metadata:
   name: {{ .Release.Name }}-navidrome-config
 data:
   navidrome.toml: |
-    {{ include "toToml" .Values.navidrome.config | indent 8 }}
+    {{ .Values.navidrome.config | indent 4 }}
