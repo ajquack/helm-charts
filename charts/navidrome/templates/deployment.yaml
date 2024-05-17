@@ -66,7 +66,7 @@ spec:
           emptyDir: {}
           {{- end }}
         {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
-        - name: navidrome-music
+        - name: navidrome-data
           persistentVolumeClaim:
             claimName: {{ if .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{ .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
         {{- end }}
