@@ -40,10 +40,10 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          #livenessProbe:
+          #  {{- toYaml .Values.livenessProbe | nindent 12 }}
+          #readinessProbe:
+          #  {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
@@ -81,7 +81,6 @@ spec:
         - name: navidrome-config
           configMap:
             name: navidrome-config
-        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
