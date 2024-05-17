@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata: 
   name: {{ .Release.Name }}-navidrome-config
 data:
-  navidrome.toml: {{ .Values.navidrome.config }}
+  navidrome.toml: {{- .Values.navidrome.config | toToml | indent 4 }}
