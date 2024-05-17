@@ -48,16 +48,15 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: navidrome-main
-              mountPath: /data
-              subPath: {{ ternary "root" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
+              mountPath: /
+              subPath: {{ ternary "data" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
             {{- if and .Values.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
             - name: navidrome-data
               mountPath: {{ .Values.navidrome.datadir }}
-              subPath: {{ ternary "data" (printf "%s/music" .Values.persistence.navidromeMusic.subPath) (empty .Values.persistence.navidromeMusic.subPath) }}
             {{- else }}
             - name: navidrome-main
-              mountPath: {{ .Values.navidrome.datadir }}
-              subPath: {{ ternary "data" (printf "%s/music" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
+              mountPath: /
+              subPath: {{ ternary "music" (printf "%s/music" .Values.persistence.subPath) (empty .Values.persistence.subPath) }}
             {{- end }}
             - name: navidrome-config
               mountPath: /data
