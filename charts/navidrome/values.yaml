@@ -17,7 +17,7 @@ podAnnotations: {}
 podLabels: {}
 
 navidrome:
-  datadir: /music
+  datadir: /data/music
   persistence:
     enabled: false
     annotations: {}
@@ -53,7 +53,7 @@ navidrome:
     LogLevel: "info"
     ScanSchedule: "@every 24h"
     TranscodingCacheSize: "150MiB"
-    MusicFolder: "/music"
+    MusicFolder: "/data/music"
 
 service:
   annotations: {}
