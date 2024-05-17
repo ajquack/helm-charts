@@ -63,16 +63,16 @@ spec:
               readOnly: true
       volumes:
         - name: navidrome-main
-          {{- if .Values.persistence.enabled }}
+          {{- if .Values.navidrome.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome{{- end }}
+            claimName: {{ if .Values.navidrome.persistence.existingClaim }}{{ .Values.navidrome.persistence.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome{{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
-        {{- if and .Values.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
+        {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.persistence.enabled }}
         - name: navidrome-music
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.navidromeMusic.existingClaim }}{{ .Values.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
+            claimName: {{ if .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{ .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
         {{- end }}
         - name: navidrome-config
           configMap:
