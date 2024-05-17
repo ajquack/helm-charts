@@ -13,36 +13,42 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-# This is just an example! Please see available options to customize Navidrome for your needs at
-# https://www.navidrome.org/docs/usage/configuration-options/#available-options
 navidrome:
   datadir: /music
+  persistence:
+    enabled: false
+    annotations: {}
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim: ""
+    ## navidrome data Persistent Volume StorageClass
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ## GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  
+    ## Use an additional pvc for the data directory rather than a subpath of the default PVC
+    ## Useful to store data on a different storageClass (e.g. on slower disks)
+    navidromeMusic:
+      enabled: false
+      subPath: /music
+      annotations: {}
+      storageClass: ""
+      existingClaim: ""
+      accessMode: ReadWriteOnce
+      size: 1Gi
+  # This is just an example! Please see available options to customize Navidrome for your needs at
+  # https://www.navidrome.org/docs/usage/configuration-options/#available-options
   config:
     LogLevel: "info"
     ScanSchedule: "@every 24h"
@@ -99,35 +105,27 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-persistence:
-  enabled: false
-  annotations: {}
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  ##
-  existingClaim: ""
-  ## navidrome data Persistent Volume StorageClass
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ## GKE, AWS & OpenStack)
-  ##
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 1Gi
+podSecurityContext: {}
+  # fsGroup: 2000
 
-  ## Use an additional pvc for the data directory rather than a subpath of the default PVC
-  ## Useful to store data on a different storageClass (e.g. on slower disks)
-  navidromeMusic:
-    enabled: false
-    subPath: /music
-    annotations: {}
-    storageClass: ""
-    existingClaim: ""
-    accessMode: ReadWriteOnce
-    size: 1Gi
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
 livenessProbe:
   httpGet:
