@@ -5,4 +5,4 @@ metadata:
 data:
   navidrome.toml: |
     MusicFolder = ".{{ .Values.navidrome.datadir }}"
-    {{- .Values.navidrome.config | toToml | indent 4 }}
+    {{- .Values.navidrome.config | toToml | nindent 4 }}
