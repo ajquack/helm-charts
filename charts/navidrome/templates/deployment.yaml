@@ -82,7 +82,6 @@ spec:
           configMap:
             name: navidrome-config
         {{- end }}
-      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
