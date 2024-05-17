@@ -31,36 +31,36 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: navidrome
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          #livenessProbe:
-          #  {{- toYaml .Values.livenessProbe | nindent 12 }}
-          #readinessProbe:
-          #  {{- toYaml .Values.readinessProbe | nindent 12 }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: navidrome-main
-              mountPath: /
-              subPath: {{ ternary "data" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
-            {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
-            - name: navidrome-data
-              mountPath: {{ .Values.navidrome.datadir }}
-            {{- else }}
-            - name: navidrome-main
-              mountPath: /
-              subPath: {{ ternary "music" (printf "%s/music" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
-            {{- end }}
-            - name: navidrome-config
-              mountPath: /data
-              readOnly: true
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+          - name: navidrome
+            containerPort: {{ .Values.service.port }}
+            protocol: TCP
+        #livenessProbe:
+        #  {{- toYaml .Values.livenessProbe | nindent 12 }}
+        #readinessProbe:
+        #  {{- toYaml .Values.readinessProbe | nindent 12 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+          - name: navidrome-main
+            mountPath: /
+            subPath: {{ ternary "data" (printf "%s/data" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
+          {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
+          - name: navidrome-data
+            mountPath: {{ .Values.navidrome.datadir }}
+          {{- else }}
+          - name: navidrome-main
+            mountPath: /
+            subPath: {{ ternary "music" (printf "%s/music" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
+          {{- end }}
+          - name: navidrome-config
+            mountPath: /data
+            readOnly: true
       volumes:
         - name: navidrome-main
           {{- if .Values.navidrome.persistence.enabled }}
