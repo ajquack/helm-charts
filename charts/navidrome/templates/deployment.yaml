@@ -53,10 +53,6 @@ spec:
           {{- if and .Values.navidrome.persistence.navidromeMusic.enabled .Values.navidrome.persistence.enabled }}
           - name: navidrome-data
             mountPath: {{ .Values.navidrome.datadir }}
-          {{- else }}
-          - name: navidrome-main
-            mountPath: /data
-            subPath: {{ ternary "music" (printf "%s/music" .Values.navidrome.persistence.subPath) (empty .Values.navidrome.persistence.subPath) }}
           {{- end }}
           - name: navidrome-config
             mountPath: /data

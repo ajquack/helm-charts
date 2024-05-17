@@ -41,7 +41,6 @@ navidrome:
     ## Useful to store data on a different storageClass (e.g. on slower disks)
     navidromeMusic:
       enabled: false
-      subPath: /music
       annotations: {}
       storageClass: ""
       existingClaim: ""
@@ -53,7 +52,6 @@ navidrome:
     LogLevel: "info"
     ScanSchedule: "@every 24h"
     TranscodingCacheSize: "150MiB"
-    MusicFolder: "/data/music"
 
 service:
   annotations: {}

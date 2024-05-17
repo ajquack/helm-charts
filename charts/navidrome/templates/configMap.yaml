@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata: 
   name: {{ .Release.Name }}-navidrome-config
 data:
-  navidrome.toml: {{- .Values.navidrome.config | toToml | indent 4 }}
+  navidrome.toml: |
+    MusicFolder = ".{{ .Values.navidrome.datadir }}"
+    {{- .Values.navidrome.config | toToml | indent 4 }}
