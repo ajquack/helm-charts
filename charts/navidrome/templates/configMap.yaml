@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata: 
-  name: nginx-configmap
+  name: {{ .Release.Name }}-navidrome-config
 data:
-  navidrome.toml: {{ .Values.navidrome.config }}
+  navidrome.toml: |
+    {{ .Values.navidrome.config | toToml | indent 8 }}

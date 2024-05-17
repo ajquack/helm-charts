@@ -39,15 +39,14 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# This is just an example! Please see available options to customize Navidrome for your needs at
+# https://www.navidrome.org/docs/usage/configuration-options/#available-options
 navidrome:
-  config: |
-    # This is just an example! Please see available options to customize Navidrome for your needs at
-    # https://www.navidrome.org/docs/usage/configuration-options/#available-options
-
-    LogLevel = 'DEBUG'
-    ScanSchedule = '@every 24h'
-    TranscodingCacheSize = '150MiB'
-    MusicFolder = '/music'
+  config:
+    LogLevel: "info"
+    ScanSchedule: "@every 24h"
+    TranscodingCacheSize: "150MiB"
+    MusicFolder: "/music"
 
 service:
   annotations: {}

@@ -60,3 +60,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Convert YAML to TOML
+*/}}
+{{- define "toToml" -}}
+{{- $root := . -}}
+{{- range $key, $value := . -}}
+{{ $key }} = "{{ $value }}"
+{{ end -}}
+{{- end -}}
