@@ -54,7 +54,7 @@ spec:
           - name: navidrome-data
             mountPath: {{ .Values.navidrome.datadir }}
           {{- end }}
-          - name: {{ .Release.Name }}-navidrome-config
+          - name: navidrome-config
             mountPath: /data
             readOnly: true
       volumes:
@@ -72,7 +72,7 @@ spec:
         {{- end }}
         - name: navidrome-config
           configMap:
-            name: navidrome-config
+            name: {{ .Release.Name }}-navidrome-config   
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
