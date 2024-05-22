@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata: 
-  name: {{ .Release.Name }}-navidrome-config
-data:
-  navidrome.toml: |
-    MusicFolder = ".{{ .Values.navidrome.datadir }}"
-    {{- .Values.navidrome.config | toToml | nindent 4 }}
