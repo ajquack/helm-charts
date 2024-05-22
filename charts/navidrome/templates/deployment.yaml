@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "navidrome.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "navidrome.selectorLabels" . | nindent 6 }}
@@ -42,9 +40,9 @@ spec:
             value: "{{ $value }}"
           {{- end }}
         ports:
-          - name: navidrome
+          - name: {{ include "navidrome.fullname" . }}
             containerPort: {{ .Values.service.port }}
-            protocol: TCP
+            protocol: {{ .Values.service.protocol }}
         livenessProbe:
           {{- toYaml .Values.livenessProbe | nindent 12 }}
         readinessProbe:
@@ -52,22 +50,22 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
-        - name: navidrome-data
-          mountPath: /data
-        - name: navidrome-music
-          mountPath: /music
+        - name: {{ template "navidrome.fullname" . }}-data
+          mountPath: {{ .Values.navidrome.config.dirs.dataDir }}
+        - name: {{ template "navidrome.fullname" . }}-music
+          mountPath: {{ .Values.navidrome.config.dirs.musicDir }}
       volumes:
-      - name: navidrome-data
+      - name: {{ template "navidrome.fullname" . }}-data
         {{- if .Values.navidrome.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ if .Values.navidrome.persistence.existingClaim }}{{ .Values.navidrome.persistence.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome{{- end }}
+          claimName: {{ if .Values.navidrome.persistence.existingClaim }}{{ .Values.navidrome.persistence.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-data{{- end }}
         {{- else }}
         emptyDir: {}
         {{- end }}
-      - name: navidrome-music
+      - name: {{ template "navidrome.fullname" . }}-music
         {{- if .Values.navidrome.persistence.navidromeMusic.enabled }}
         persistentVolumeClaim:
-          claimName: {{ if .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{ .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-navidrome-music{{- end }}
+          claimName: {{ if .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{ .Values.navidrome.persistence.navidromeMusic.existingClaim }}{{- else }}{{ template "navidrome.fullname" . }}-music{{- end }}
         {{- else}}
         emptyDir: {}
         {{- end }}

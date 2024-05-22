@@ -48,6 +48,9 @@ navidrome:
   # This is just an example! Please see available options to customize Navidrome for your needs at
   # https://www.navidrome.org/docs/usage/configuration-options/#available-options
   config:
+    dirs:
+      dataDir: /data
+      musicDir: /music
     env:
       ND_MUSICFOLDER: /music
       ND_SCANSCHEDULE: "@every 15m"
@@ -58,19 +61,9 @@ navidrome:
 service:
   annotations: {}
   labels: {}
-  ## Port for navidrome Service to listen on
-  ##
   port: 4533
-  ## To be used with a proxy extraContainer port
-  ##
-  targetport: 4533
-  ## If you want to make sure that connections from a particular client are passed to the same Pod each time
-  ## Accepts 'ClientIP' or 'None'
-  ##
+  protocol: TCP
   sessionAffinity: None
-  ## If you want to modify the ClientIP sessionAffinity timeout
-  ## The value must be >0 && <=86400(for 1 day) if ServiceAffinity == "ClientIP"
-  ##
   sessionAffinityConfig:
     clientIP:
       timeoutSeconds: 10800
@@ -118,6 +111,7 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 568
   runAsGroup: 568
+  fsGroup: 568
   seccompProfile:
     type: RuntimeDefault
 
@@ -142,6 +136,7 @@ livenessProbe:
   periodSeconds: 15
   successThreshold: 1
   timeoutSeconds: 5
+
 readinessProbe:
   failureThreshold: 4
   httpGet:
