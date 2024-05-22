@@ -98,8 +98,8 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  fsGroup: 568
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -111,7 +111,6 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 568
   runAsGroup: 568
-  fsGroup: 568
   seccompProfile:
     type: RuntimeDefault
 
