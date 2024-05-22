@@ -17,7 +17,6 @@ podAnnotations: {}
 podLabels: {}
 
 navidrome:
-  datadir: /data/music
   persistence:
     enabled: false
     annotations: {}
@@ -49,9 +48,12 @@ navidrome:
   # This is just an example! Please see available options to customize Navidrome for your needs at
   # https://www.navidrome.org/docs/usage/configuration-options/#available-options
   config:
-    LogLevel: "info"
-    ScanSchedule: "@every 24h"
-    TranscodingCacheSize: "150MiB"
+    env:
+      ND_MUSICFOLDER: /music
+      ND_SCANSCHEDULE: "@every 15m"
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_ENABLETRANSCODINGCONFIG: false
 
 service:
   annotations: {}
@@ -106,13 +108,18 @@ resources: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 568
+  runAsGroup: 568
+  seccompProfile:
+    type: RuntimeDefault
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -126,13 +133,25 @@ serviceAccount:
   name: ""
 
 livenessProbe:
+  failureThreshold: 5
   httpGet:
     path: /
-    port: http
+    port: 4533
+    scheme: HTTP
+  initialDelaySeconds: 12
+  periodSeconds: 15
+  successThreshold: 1
+  timeoutSeconds: 5
 readinessProbe:
+  failureThreshold: 4
   httpGet:
     path: /
-    port: http
+    port: 4533
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 12
+  successThreshold: 2
+  timeoutSeconds: 5
 
 autoscaling:
   enabled: false
