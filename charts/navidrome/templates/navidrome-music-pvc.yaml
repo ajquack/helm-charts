@@ -3,7 +3,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "navidrome.fullname" . }}-navidrome-music
+  name: {{ template "navidrome.fullname" . }}-music
   labels:
     app.kubernetes.io/name: {{ include "navidrome.name" . }}
     helm.sh/chart: {{ include "navidrome.chart" . }}
