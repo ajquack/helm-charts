@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   libvirt-cloud-controller-manager:
   - apiVersion: v2
+    created: "2025-03-03T13:13:21.859000003Z"
+    digest: c99da2364cf82db46cabd00f169e75e1287b02abfacd64f3522ef26ad850e3fa
+    name: libvirt-cloud-controller-manager
+    type: application
+    urls:
+    - libvirt-cloud-controller-manager-1.0.3-rc0.2.tgz
+    version: 1.0.3-rc0.2
+  - apiVersion: v2
     created: "2025-03-03T12:47:20.76403932Z"
     digest: b4d25c34933c1572db8dc8e3ec7435f1bcda23d406db6013db70ef8362f3e917
     name: libvirt-cloud-controller-manager
@@ -33,4 +41,4 @@ entries:
     urls:
     - libvirt-cloud-controller-manager-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-03T12:47:20.763381461Z"
+generated: "2025-03-03T13:13:21.858534964Z"
